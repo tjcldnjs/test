@@ -440,7 +440,7 @@ public class ReservationUpdatePage extends JFrame {
 		});
 		updateDateBtn.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				DateChange2 dc = new DateChange2();
+				DateChange2 dc = new DateChange2(null,null);
 				dc.setVisible(true);
 				setVisible(false);
 			}

@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
@@ -18,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import DAO.CarDAO;
-import calendar.SwingCalendar3;
+import calendar.datechangeSwingCalendar4;
 
 public class DateChange2 extends JFrame {
 
@@ -31,18 +32,30 @@ public class DateChange2 extends JFrame {
 	private JTextField title;
 	private JLabel logoLabel;
 
-	public DateChange2() {
+	private String rentDate;
+	private String returnDate;
+
+	public DateChange2(String rentDate, String returnDate) {
+		this.rentDate = rentDate;
+		this.returnDate = returnDate;
 		initDate();
 		setInitLayout();
 		addEventListener();
 	}
 
+//	public DateChange2() {
+//		initDate();
+//		setInitLayout();
+//		addEventListener();
+//	}
+
 	public void initDate() {
 		backgroundPanel = new BackgroundPanel();
-		dateChoiceBtn = new JButton(new ImageIcon(""));
+		dateChoiceBtn = new JButton(new ImageIcon("buttonImage/대여일 선택하기.png")); // 날짜 선택 이미지로 변경 예정
 		updateDateBtn = new JButton(new ImageIcon("buttonImage/대여기간 변경하기.png"));
 		title = new JTextField("대여기간 변경");
 		logoLabel = new JLabel(new ImageIcon("img/logo2.png"));
+
 	}
 
 	public void setInitLayout() {
@@ -86,13 +99,15 @@ public class DateChange2 extends JFrame {
 	public void addEventListener() {
 		dateChoiceBtn.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				// 달력 열고 선택한 값 받아서 CarDAO.changeDate(null, null, ReservationUpdatePage.getReceivedid());
-				
+				new datechangeSwingCalendar4(DateChange2.this);
+
+				// 달력 열고 선택한 값 받아서 CarDAO.changeDate(null, null,
+				// ReservationUpdatePage.getReceivedid());
+
 				// null에 Date 값넣기
 			}
 		});
-		
-		
+
 		updateDateBtn.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				int result = JOptionPane.showConfirmDialog(null, "선택하신 날짜로 변경하시겠습니까 ?", "알림",
@@ -101,12 +116,15 @@ public class DateChange2 extends JFrame {
 					int result2 = JOptionPane.showConfirmDialog(null, "변경되었습니다.", "알림", JOptionPane.DEFAULT_OPTION,
 							JOptionPane.PLAIN_MESSAGE);
 					if (result2 == JOptionPane.YES_OPTION) {
+						Date rentDate1 = Date.valueOf(rentDate);
+						Date returnDate1 = Date.valueOf(returnDate);
+						System.out.println("dasaasddsadsadsa" + rentDate1);
 						try {
-							CarDAO.changeDate(null, null, ReservationUpdatePage.getReceivedid());
-							new ReservationUpdatePage();
+							CarDAO.changeDate(rentDate1, returnDate1, ReservationUpdatePage.getReceivedid());
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
+						setVisible(false);
 					}
 				}
 			}
@@ -131,6 +149,6 @@ public class DateChange2 extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new DateChange2();
+		new DateChange2(null, null);
 	}
 }

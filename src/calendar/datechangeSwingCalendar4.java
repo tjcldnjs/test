@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import ch01.DateChange2;
 import ch01.DiaryReservationPanel;
 
-public class SwingCalendar3 extends JFrame implements Runnable {
+public class datechangeSwingCalendar4 extends JFrame implements Runnable {
 
 	private DiaryReservationPanel drp;
 	private DateChange2 dc;
@@ -25,6 +25,10 @@ public class SwingCalendar3 extends JFrame implements Runnable {
 	// 다이어리 생성
 	private Diary dr;
 
+	// Date값 보내주기
+	private String rentDate;
+	private String returnDate;
+	
 	// 패널
 	private JPanel term;
 	private JPanel calendar;
@@ -63,16 +67,7 @@ public class SwingCalendar3 extends JFrame implements Runnable {
 	private boolean secondClick = true;
 	private int firstClickedIndex = -1;
 
-	public SwingCalendar3(DiaryReservationPanel drp) {
-		this.drp = drp;
-		dr = new Diary();
-		initData();
-		setInitLayout();
-
-		new Thread(this).start();
-	}
-	
-	public SwingCalendar3(DateChange2 dc) {
+	public datechangeSwingCalendar4(DateChange2 dc) {
 		this.dc = dc;
 		dr = new Diary();
 		initData();
@@ -170,7 +165,6 @@ public class SwingCalendar3 extends JFrame implements Runnable {
 						////////////////// !!!!!!!!!!!!!!!!!///////////////////////////
 
 						System.out.println(dr.getAllCal(firstButtonText));
-						drp.updatedateLabelText("대여일 : " + dr.getAllCal(firstButtonText));
 
 						////////////////// !!!!!!!!!!!!!!!!!///////////////////////////
 
@@ -183,7 +177,6 @@ public class SwingCalendar3 extends JFrame implements Runnable {
 						// 대여일 , 반납일 출력하기!!!!!!!!!!!
 						//////////////// !!!!!!!!!!!!!!!!!!!!!!////////////////////////////
 
-						drp.updateReturnLabelText("반납일 : " + dr.getAllCal(secondButtonText));
 
 						//////////////// !!!!!!!!!!!!!!!!!!!!!!////////////////////////////
 					}
@@ -192,6 +185,7 @@ public class SwingCalendar3 extends JFrame implements Runnable {
 						firstClickedIndex = index;
 						firstClick = false;
 						System.out.println("대여일 : " + dr.getAllCal(firstButtonText));
+						rentDate = dr.getAllCal(firstButtonText);
 					} else {
 						// 두번쨰 클릭 값 받아 오기
 						int secondClickedIndex = index;
@@ -200,6 +194,7 @@ public class SwingCalendar3 extends JFrame implements Runnable {
 						int start = Math.min(firstClickedIndex, secondClickedIndex);
 						int end = Math.max(firstClickedIndex, secondClickedIndex);
 						System.out.println("반납일 : " + dr.getAllCal(secondButtonText));
+						returnDate = dr.getAllCal(secondButtonText);
 
 						for (int j = start + 1; j < end + 1; j++) {
 							buttons[j].setEnabled(false);
@@ -208,6 +203,7 @@ public class SwingCalendar3 extends JFrame implements Runnable {
 							}
 
 						}
+						DateChange2 d2 = new DateChange2(rentDate, returnDate);
 						firstClickedIndex = -1;
 						firstClick = true;
 
